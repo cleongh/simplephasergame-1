@@ -8,6 +8,7 @@ export default class End extends Phaser.Scene {
    * Constructor de la escena
    */
   constructor() {
+    // también se puede pasar directamente el string: super('end')
     super({ key: 'end' });
   }
 
