@@ -2,9 +2,9 @@ import Platform from './platform.js';
 import Player from './player.js';
 
 /**
- * Escena principal del juego. La escena se compone de una serie de plataformas 
- * sobre las que se sitúan las bases en las podrán aparecer las estrellas. 
- * El juego comienza generando aleatoriamente una base sobre la que generar una estrella. 
+ * Escena principal del juego. La escena se compone de una serie de plataformas
+ * sobre las que se sitúan las bases en las podrán aparecer las estrellas.
+ * El juego comienza generando aleatoriamente una base sobre la que generar una estrella.
  * Cada vez que el jugador recoge la estrella, aparece una nueva en otra base.
  * El juego termina cuando el jugador ha recogido 10 estrellas.
  * @extends Phaser.Scene
@@ -25,6 +25,14 @@ export default class Level extends Phaser.Scene {
     this.bases = this.add.group();
     this.player = new Player(this, 200, 300);
 
+    this.fullScreenButton = this.add.text(10, 50, "Fullscreen").setInteractive()
+
+    this.fullScreenButton.on('pointerdown', () => {
+      // this.scale.scaleMode = Phaser.Scale.FIT
+      this.scale.toggleFullscreen()
+      // this.scale.width=this.scale.max
+    })
+
     new Platform(this, this.player, this.bases, 150, 350);
     new Platform(this, this.player, this.bases, 850, 350);
     new Platform(this, this.player, this.bases, 500, 200);
@@ -39,7 +47,7 @@ export default class Level extends Phaser.Scene {
    * Si es null, entonces se crea aleatoriamente sobre cualquiera de las bases existentes
    */
   spawn(from = null) {
-    Phaser.Math.RND.pick(from || this.bases.children.entries).spawn();
+    Phaser.Math.RND.pick(from || this.bases.children.entries).spawn();
   }
 
   /**
@@ -47,15 +55,15 @@ export default class Level extends Phaser.Scene {
    * sobre la que estaba la estrella cogida para evitar repeticiones
    * @param {Base} base La base sobre la que estaba la estrella que se ha cogido
    */
-  starPickt (base) {
+  starPickt(base) {
     this.player.point();
-      if (this.player.score == this.stars) {
-        this.scene.start('end');
-      }
-      else {
-        let s = this.bases.children.entries;
-        this.spawn(s.filter(o => o !== base));
+    if (this.player.score == this.stars) {
+      this.scene.start('end');
+    }
+    else {
+      let s = this.bases.children.entries;
+      this.spawn(s.filter(o => o !== base));
 
-      }
+    }
   }
 }
